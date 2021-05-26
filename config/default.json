@@ -1,0 +1,14 @@
+{
+  "DB_CLIENT": "mysql2",
+  "DB_NAME": "lezzoo_store",
+  "DB_HOST": "localhost",
+  "DB_USER": "root",
+  "DB_PASSWORD": "",
+  "DB_CLIENT_PRODUCTION": "mysql2",
+  "DB_NAME_PRODUCTION": "lezzoo_store",
+  "DB_HOST_PRODUCTION": "localhost",
+  "DB_USER_PRODUCTION": "root",
+  "DB_PASSWORD_PRODUCTION": "",
+  "jwtToken": "secretToken",
+  "NODE_ENVIRONMENT": "development"
+}
