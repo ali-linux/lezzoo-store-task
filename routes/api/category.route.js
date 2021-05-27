@@ -12,7 +12,7 @@ const auth = require("../../middlewares/auth.middleware");
 router.post(
   "/store/:id/add",
   auth,
-  // categoryValidator.addCategoryValidator,
+  categoryValidator.addCategoryValidator,
   categoryController.addCategory
 );
 
@@ -45,7 +45,7 @@ router.get("/:id", auth, categoryController.getSingleCategory);
 router.put(
   "/update/:id",
   auth,
-  // categoryValidator.addCategoryValidator,
+  categoryValidator.addCategoryValidator,
   categoryController.updateCategory
 );
 

@@ -3,6 +3,34 @@ const router = express.Router();
 const storeController = require("../../controllers/store.controller");
 const storeValidator = require("../../validators/store.validator");
 const auth = require("../../middlewares/auth.middleware");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "client/assets/images/stores/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter: fileFilter,
+});
+
 /*
   @route api/store/add
   @access protected
@@ -11,6 +39,7 @@ const auth = require("../../middlewares/auth.middleware");
 router.post(
   "/add",
   auth,
+  upload.single("imageFile"),
   storeValidator.addStoreValidator,
   storeController.addStore
 );
@@ -44,6 +73,7 @@ router.get("/:id", auth, storeController.getSingleStore);
 router.put(
   "/update/:id",
   auth,
+  upload.single("imageFile"),
   storeValidator.addStoreValidator,
   storeController.updateStore
 );
