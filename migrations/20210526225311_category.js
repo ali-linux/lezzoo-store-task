@@ -3,8 +3,6 @@ exports.up = function (knex) {
     table.increments("id").primary();
     table.string("name", 255);
     table.timestamps(true, true);
-    table.integer("store_id").unsigned();
-    table.foreign("store_id").references("store.id");
   });
 };
 

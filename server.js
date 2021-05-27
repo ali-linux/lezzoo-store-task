@@ -5,6 +5,7 @@ const compression = require("compression");
 const checkDb = require("./utils/checkDbConnection");
 const authRoute = require("./routes/api/auth.route");
 const storeRoute = require("./routes/api/store.route");
+const categoryRoute = require("./routes/api/category.route");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -38,6 +39,7 @@ app.use(express.json({ extended: false, limit: "40kb" }));
 //ROUTES
 app.use("/api/auth", authRoute);
 app.use("/api/store", storeRoute);
+app.use("/api/category", categoryRoute);
 
 app.listen(port, () => {
   console.log("Express server listening to port ", `http://localhost:${port}`);
