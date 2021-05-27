@@ -2,7 +2,9 @@ const db = require("../config/db");
 
 const addStore = async (req, res, next) => {
   try {
-    const { name, email, logo } = req.body;
+    const { name, email } = req.body;
+    let logo = req.body.logo;
+    if (typeof req.file !== "undefined") logo = req.file.path;
     const result = await db("store").insert({
       name,
       email: email.toLowerCase(),
@@ -72,9 +74,11 @@ const getSingleStore = async (req, res) => {
 };
 
 const updateStore = async (req, res) => {
-  id = req.params.id;
+  const id = req.params.id;
   try {
-    const { name, email, logo } = req.body;
+    const { name, email } = req.body;
+    let logo = req.body.logo;
+    if (typeof req.file !== "undefined") logo = req.file.path;
     const result = await db("store")
       .where({
         id,
