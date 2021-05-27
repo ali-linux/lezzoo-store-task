@@ -1,7 +1,7 @@
-// const express = require("express");
-// const router = express.Router();
-// const storeController = require("../../controllers/auth.controller");
-// const storeValidator = require("../../validators/auth.validator");
-// const auth = require("../../middlewares/auth.middleware");
+const express = require("express");
+const router = express.Router();
+const categoryController = require("../../controllers/category.controller");
+const categoryValidator = require("../../validators/category.validator");
+const auth = require("../../middlewares/auth.middleware");
 
-// module.exports = router;
+module.exports = router;
