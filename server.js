@@ -86,11 +86,11 @@ app.use("/api/store", storeRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/item", itemRoute);
 
-// app.all("*", (req, res, next) => {
-//   return res.status(404).json({
-//     msg: "404 api endpoint not found",
-//   });
-// });
+app.all("*", (req, res, next) => {
+  return res.status(404).json({
+    msg: "404 api endpoint not found",
+  });
+});
 app.listen(port, () => {
   console.log(process.env.NODE_ENV);
   console.log("Express server listening to port ", `http://localhost:${port}`);
