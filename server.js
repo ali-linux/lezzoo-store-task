@@ -92,5 +92,6 @@ app.use("/api/item", itemRoute);
 //   });
 // });
 app.listen(port, () => {
+  console.log(process.env.NODE_ENV);
   console.log("Express server listening to port ", `http://localhost:${port}`);
 });

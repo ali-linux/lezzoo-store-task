@@ -11,6 +11,7 @@ import { EditOutlined, DeleteFilled } from "@ant-design/icons";
 import CategoryList from "./CategoryList";
 import { setAlert } from "../../redux/actions/alert.action";
 import Alert from "../layout/Alert";
+import Pagination from "../layout/Pagination";
 
 const StoreDetailPage = ({ match }) => {
   const dispatch = useDispatch();
@@ -46,6 +47,18 @@ const StoreDetailPage = ({ match }) => {
     dispatch(getCategories(store_id));
   }, [dispatch, match.params.id]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [categoriesPerPage] = useState(4);
+  // Get current posts
+  const indexOfLastCategory = currentPage * categoriesPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
+  const currentCategories = categories.slice(
+    indexOfFirstCategory,
+    indexOfLastCategory
+  );
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
       <h1>Store Name: {store.name}</h1>
@@ -77,55 +90,14 @@ const StoreDetailPage = ({ match }) => {
           Add Category
         </Button>
       </div>
-      <CategoryList store_id={match.params.id} />
-      {/* <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">name</th>
-
-            <th scope="col">store id</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((category) => (
-            <tr key={category.id}>
-              <th scope="row">{category.id}</th>
-              <td>
-                <Link to={`/store/${match.params.id}/category/${category.id}`}>
-                  {category.name}
-                </Link>
-              </td>
-              <td>{category.store_id}</td>
-              <td>
-                <EditOutlined
-                  style={{
-                    cursor: "pointer",
-                    color: "green",
-                    width: "50px",
-                    height: "50px",
-                  }}
-                />
-              </td>
-              <td>
-                <DeleteFilled
-                  style={{
-                    cursor: "pointer",
-                    color: "red",
-                    width: "50px",
-                    height: "50px",
-                  }}
-                  onClick={() => {
-                    dispatch(deleteCategory(category.id));
-                  }}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
+      <CategoryList store_id={match.params.id} categories={currentCategories} />
+      <div className="pagi" style={{ padding: "10px 0" }}>
+        <Pagination
+          postsPerPage={categoriesPerPage}
+          totalPosts={categories.length}
+          paginate={paginate}
+        />
+      </div>
     </div>
   );
 };

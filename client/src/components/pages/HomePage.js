@@ -8,6 +8,8 @@ import "./homePage.css";
 import axios from "axios";
 import StoreList from "./StoreList";
 import { getStores, addStore } from "../../redux/actions/store.action";
+import Pagination from "../layout/Pagination";
+
 const HomePage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -74,6 +76,15 @@ const HomePage = () => {
       setUploading(false);
     }
   };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [storesPerPage] = useState(4);
+  // Get current posts
+  const indexOfLastStore = currentPage * storesPerPage;
+  const indexOfFirstStore = indexOfLastStore - storesPerPage;
+  const currentStore = stores.slice(indexOfFirstStore, indexOfLastStore);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container">
@@ -121,7 +132,14 @@ const HomePage = () => {
       ) : (
         <Fragment>
           <Divider orientation="left">Stores</Divider>
-          <StoreList />
+          <StoreList stores={currentStore} />
+          <div className="pagi" style={{ padding: "10px 0" }}>
+            <Pagination
+              postsPerPage={storesPerPage}
+              totalPosts={stores.length}
+              paginate={paginate}
+            />
+          </div>
         </Fragment>
       )}
     </div>
