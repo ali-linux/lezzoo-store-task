@@ -1,60 +1,27 @@
 import axios from "axios";
 import { setAlert } from "../actions/alert.action";
 import {
-  ADD_STORE_FAIL,
-  ADD_STORE_REQUEST,
-  ADD_STORE_SUCCESS,
-  DELETE_STORE_FAIL,
-  DELETE_STORE_REQUEST,
-  DELETE_STORE_SUCCESS,
-  GET_ALL_STORE_FAIL,
-  GET_ALL_STORE_REQUEST,
-  GET_ALL_STORE_SUCCESS,
-  GET_STORE_FAIL,
-  GET_STORE_REQUEST,
-  GET_STORE_SUCCESS,
-  UPDATE_STORE_FAIL,
-  UPDATE_STORE_REQUEST,
-  UPDATE_STORE_SUCCESS,
-} from "../constants/store.constants";
+  ADD_CATEGORY_FAIL,
+  ADD_CATEGORY_REQUEST,
+  ADD_CATEGORY_SUCCESS,
+  DELETE_CATEGORY_FAIL,
+  DELETE_CATEGORY_REQUEST,
+  DELETE_CATEGORY_SUCCESS,
+  GET_CATEGORIES_FAIL,
+  GET_CATEGORIES_REQUEST,
+  GET_CATEGORIES_SUCCESS,
+  GET_CATEGORY_FAIL,
+  GET_CATEGORY_REQUEST,
+  GET_CATEGORY_SUCCESS,
+  UPDATE_CATEGORY_FAIL,
+  UPDATE_CATEGORY_REQUEST,
+  UPDATE_CATEGORY_SUCCESS,
+} from "../constants/category.constants";
 
-export const getStores = () => async (dispatch) => {
+export const getCategories = (store_id) => async (dispatch) => {
   try {
     dispatch({
-      type: GET_ALL_STORE_REQUEST,
-    });
-    const token = JSON.parse(localStorage.getItem("clientInfo")).token;
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": token,
-      },
-    };
-    const { data } = await axios.get("/api/store/", config);
-    dispatch({
-      type: GET_ALL_STORE_SUCCESS,
-      payload: data,
-    });
-    console.log(data);
-  } catch (err) {
-    const errors = err.response.data.errors;
-    if (errors) {
-      errors.forEach((err) => {
-        dispatch(setAlert(err.msg, "danger"));
-      });
-    } else {
-      dispatch(setAlert(err.response.data.msg, "danger"));
-    }
-    dispatch({
-      type: GET_ALL_STORE_FAIL,
-    });
-  }
-};
-
-export const addStore = (name, email, logo) => async (dispatch) => {
-  try {
-    dispatch({
-      type: ADD_STORE_REQUEST,
+      type: GET_CATEGORIES_REQUEST,
     });
 
     const token = JSON.parse(localStorage.getItem("clientInfo")).token;
@@ -64,17 +31,9 @@ export const addStore = (name, email, logo) => async (dispatch) => {
         "x-auth-token": token,
       },
     };
-    const { data } = await axios.post(
-      "api/store/add",
-      {
-        name,
-        email,
-        logo,
-      },
-      config
-    );
+    const { data } = await axios.get(`/api/category/store/${store_id}`, config);
     dispatch({
-      type: ADD_STORE_SUCCESS,
+      type: GET_CATEGORIES_SUCCESS,
       payload: data,
     });
   } catch (err) {
@@ -87,15 +46,15 @@ export const addStore = (name, email, logo) => async (dispatch) => {
       dispatch(setAlert(err.response.data.msg, "danger"));
     }
     dispatch({
-      type: ADD_STORE_FAIL,
+      type: GET_CATEGORIES_FAIL,
     });
   }
 };
 
-export const deleteStore = (id) => async (dispatch) => {
+export const getCategory = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: DELETE_STORE_REQUEST,
+      type: GET_CATEGORY_REQUEST,
     });
 
     const token = JSON.parse(localStorage.getItem("clientInfo")).token;
@@ -105,9 +64,42 @@ export const deleteStore = (id) => async (dispatch) => {
         "x-auth-token": token,
       },
     };
-    await axios.delete(`api/store/delete/${id}`, config);
+    const { data } = await axios.get(`/api/category/${id}`, config);
     dispatch({
-      type: DELETE_STORE_SUCCESS,
+      type: GET_CATEGORY_SUCCESS,
+      payload: data,
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((err) => {
+        dispatch(setAlert(err.msg, "danger"));
+      });
+    } else {
+      dispatch(setAlert(err.response.data.msg, "danger"));
+    }
+    dispatch({
+      type: GET_CATEGORY_FAIL,
+    });
+  }
+};
+
+export const deleteCategory = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_CATEGORY_REQUEST,
+    });
+
+    const token = JSON.parse(localStorage.getItem("clientInfo")).token;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+    };
+    await axios.delete(`/api/category/delete/${id}`, config);
+    dispatch({
+      type: DELETE_CATEGORY_SUCCESS,
       payload: id,
     });
   } catch (err) {
@@ -120,16 +112,17 @@ export const deleteStore = (id) => async (dispatch) => {
       dispatch(setAlert(err.response.data.msg, "danger"));
     }
     dispatch({
-      type: DELETE_STORE_FAIL,
+      type: DELETE_CATEGORY_FAIL,
     });
   }
 };
 
-export const updateStore = (id, name, email, logo) => async (dispatch) => {
+export const updateCategory = (id, name, store_id) => async (dispatch) => {
   try {
     dispatch({
-      type: UPDATE_STORE_REQUEST,
+      type: UPDATE_CATEGORY_REQUEST,
     });
+
     const token = JSON.parse(localStorage.getItem("clientInfo")).token;
     const config = {
       headers: {
@@ -137,21 +130,23 @@ export const updateStore = (id, name, email, logo) => async (dispatch) => {
         "x-auth-token": token,
       },
     };
-    const body = JSON.stringify({ name, email, logo });
-    const { data } = await axios.put(`/api/store/update/${id}`, body, config);
-
+    const { data } = await axios.put(
+      `/api/category/update/${id}`,
+      {
+        name,
+      },
+      config
+    );
     dispatch({
-      type: UPDATE_STORE_SUCCESS,
+      type: UPDATE_CATEGORY_SUCCESS,
       payload: {
         id,
         name,
-        email,
-        logo,
+        store_id,
       },
     });
     dispatch(setAlert(data.msg, "success"));
   } catch (err) {
-    console.log(err.response.data);
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach((err) => {
@@ -161,16 +156,17 @@ export const updateStore = (id, name, email, logo) => async (dispatch) => {
       dispatch(setAlert(err.response.data.msg, "danger"));
     }
     dispatch({
-      type: UPDATE_STORE_FAIL,
+      type: UPDATE_CATEGORY_FAIL,
     });
   }
 };
 
-export const getStoreDetail = (id) => async (dispatch) => {
+export const addCategory = (name, store_id) => async (dispatch) => {
   try {
     dispatch({
-      type: GET_STORE_REQUEST,
+      type: ADD_CATEGORY_REQUEST,
     });
+
     const token = JSON.parse(localStorage.getItem("clientInfo")).token;
     const config = {
       headers: {
@@ -178,13 +174,18 @@ export const getStoreDetail = (id) => async (dispatch) => {
         "x-auth-token": token,
       },
     };
-    const { data } = await axios.get(`/api/store/${id}`, config);
+    const { data } = await axios.post(
+      `/api/category/store/${store_id}/add`,
+      {
+        name,
+      },
+      config
+    );
     dispatch({
-      type: GET_STORE_SUCCESS,
+      type: ADD_CATEGORY_SUCCESS,
       payload: data,
     });
   } catch (err) {
-    console.log(err.response.data);
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach((err) => {
@@ -194,7 +195,7 @@ export const getStoreDetail = (id) => async (dispatch) => {
       dispatch(setAlert(err.response.data.msg, "danger"));
     }
     dispatch({
-      type: GET_STORE_FAIL,
+      type: ADD_CATEGORY_FAIL,
     });
   }
 };

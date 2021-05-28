@@ -6,40 +6,53 @@ import { setAlert } from "../../redux/actions/alert.action";
 import Alert from "../layout/Alert";
 import "./homePage.css";
 import axios from "axios";
-import StoreList from "./StoreList";
-import { getStores, addStore } from "../../redux/actions/store.action";
-const HomePage = () => {
+import ItemList from "./ItemList";
+import { getItems, addItem } from "../../redux/actions/item.action";
+import { getCategory } from "../../redux/actions/category.action";
+import { getStoreDetail } from "../../redux/actions/store.action";
+
+const CategoryDetailPage = ({ match }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.loginReducer);
-  const { stores, loading } = useSelector((state) => state.storeReducer);
-
+  const { items, loading } = useSelector((state) => state.itemReducer);
+  const { store } = useSelector((state) => state.storeReducer);
+  const { category } = useSelector((state) => state.categoryReducer);
   if (!isAuthenticated) history.push("/login");
 
   useEffect(() => {
-    dispatch(getStores());
-  }, [dispatch]);
+    dispatch(getItems(match.params.id, match.params.category_id));
+    dispatch(getCategory(match.params.category_id));
+    if (store.name === undefined || category.name === undefined) {
+      dispatch(getStoreDetail(match.params.id));
+    }
+  }, [dispatch, match.params]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [store, setStore] = useState({
+  const [item, setItem] = useState({
     name: "",
-    email: "",
+    image: "",
+    price: 0,
+    stock: 0,
+    store_id: match.params.id,
+    category_id: match.params.category_id,
   });
   const [uploading, setUploading] = useState(false);
 
-  const [logo, setLogo] = useState(null);
-  const { name, email } = store;
+  const [itemImage, setItemImage] = useState(null);
+  const { name, image, price, stock, store_id, category_id } = item;
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    if ((name === "", email === "")) {
+    if (name.length === 0 || price <= 0 || stock <= 0) {
       dispatch(setAlert("name is required", "danger"));
-      dispatch(setAlert("email is required", "danger"));
+      dispatch(setAlert("price is required", "danger"));
+      dispatch(setAlert("stock is required", "danger"));
     } else {
-      dispatch(addStore(name, email, logo));
       setIsModalVisible(false);
+      dispatch(addItem(name, itemImage, price, stock, category_id, store_id));
     }
   };
 
@@ -47,12 +60,12 @@ const HomePage = () => {
     setIsModalVisible(false);
   };
   const onChange = (e) => {
-    setStore({ ...store, [e.target.name]: e.target.value });
+    setItem({ ...item, [e.target.name]: e.target.value });
   };
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-
+    console.log(file);
     formData.append("imageFile", file);
 
     setUploading(true);
@@ -65,9 +78,9 @@ const HomePage = () => {
     };
 
     try {
-      const { data } = await axios.post(`/api/store/upload/`, formData, config);
+      const { data } = await axios.post("/api/store/upload/", formData, config);
 
-      setLogo(data);
+      setItemImage(data);
       setUploading(false);
     } catch (err) {
       console.log(err.response.data);
@@ -77,8 +90,16 @@ const HomePage = () => {
 
   return (
     <div className="container">
+      <h1>
+        <img
+          src={"/" + store.logo}
+          style={{ width: "40px", height: "40px", objectFit: "contain" }}
+        />{" "}
+        store name: {store.name}
+      </h1>
+      <h1>category : {category.name}</h1>
       <Modal
-        title="add Store"
+        title="add item"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -86,7 +107,7 @@ const HomePage = () => {
         <Alert />
         <Input
           type="name"
-          placeholder="Store Name"
+          placeholder="item Name"
           name="name"
           value={name}
           onChange={onChange}
@@ -95,10 +116,20 @@ const HomePage = () => {
         <br />
         <br />
         <Input
-          type="email"
-          placeholder="Email Address"
-          name="email"
-          value={email}
+          type="price"
+          placeholder="price "
+          name="price"
+          value={price}
+          onChange={onChange}
+          required
+        />
+        <br />
+        <br />
+        <Input
+          type="stock"
+          placeholder="stock"
+          name="stock"
+          value={stock}
           onChange={onChange}
           required
         />
@@ -113,19 +144,19 @@ const HomePage = () => {
           style={{ backgroundColor: "var(--primary-color)", color: "white" }}
           onClick={showModal}
         >
-          Add Store
+          Add item
         </Button>
       </div>
       {loading ? (
         <Skeleton active />
       ) : (
         <Fragment>
-          <Divider orientation="left">Stores</Divider>
-          <StoreList />
+          <Divider orientation="left">Items</Divider>
+          <ItemList store_id={store_id} category_id={category_id} />
         </Fragment>
       )}
     </div>
   );
 };
 
-export default HomePage;
+export default CategoryDetailPage;

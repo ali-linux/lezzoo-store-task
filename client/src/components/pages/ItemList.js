@@ -7,53 +7,71 @@ import { setAlert } from "../../redux/actions/alert.action";
 import Alert from "../layout/Alert";
 import "./homePage.css";
 import axios from "axios";
-import { deleteStore, updateStore } from "../../redux/actions/store.action";
+import { deleteItem, updateItem } from "../../redux/actions/item.action";
 
-const StoreList = () => {
+const ItemList = ({ store_id, category_id }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { stores, loading } = useSelector((state) => state.storeReducer);
+  const { items } = useSelector((state) => state.itemReducer);
+  // const { stores } = useSelector((state) => state.itemReducer);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [editStore, setEditStore] = useState({
+  const [editItem, setEditItem] = useState({
     id: "",
     name: "",
-    email: "",
-    logo: "",
+    price: 0,
+    stock: 0,
+    image: "",
+    category_id,
+    store_id,
   });
-  const [logo, setLogo] = useState(null);
+  // const store_name =
+  const { name, image, price, stock } = editItem;
+  const [itemImage, setItemImage] = useState(null);
   const [uploading, setUploading] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
   };
   // const { id, title, description } = addTodo;
-  const editHandler = (store) => {
-    setEditStore({
-      id: parseInt(store.id),
-      name: store.name,
-      email: store.email,
-      logo: store.logo,
+  const editHandler = ({
+    id,
+    name,
+    image,
+    price,
+    stock,
+    store_id,
+    category_id,
+  }) => {
+    setEditItem({
+      id: parseInt(id),
+      name,
+      image,
+      price,
+      stock,
+      store_id,
+      category_id,
     });
     showModal();
   };
   const handleOk = () => {
     setIsModalVisible(false);
-    console.log(editStore);
+    console.log(editItem);
     dispatch(
-      updateStore(editStore.id, editStore.name, editStore.email, editStore.logo)
+      updateItem(editItem.id, name, image, price, stock, store_id, category_id)
     );
   };
 
   const handleCancel = () => {
-    setEditStore({
+    setEditItem({
       id: "",
       name: "",
-      email: "",
+      price: 0,
+      stock: 0,
     });
     setIsModalVisible(false);
   };
   const onChange = (e) => {
-    setEditStore({ ...editStore, [e.target.name]: e.target.value });
+    setEditItem({ ...editItem, [e.target.name]: e.target.value });
   };
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -73,8 +91,8 @@ const StoreList = () => {
     try {
       const { data } = await axios.post(`/api/store/upload/`, formData, config);
 
-      setLogo(data);
-      setEditStore({ ...editStore, logo: data });
+      setItemImage(data);
+      setEditItem({ ...editItem, image: data });
       setUploading(false);
     } catch (err) {
       console.log(err.response.data);
@@ -90,67 +108,74 @@ const StoreList = () => {
         onCancel={handleCancel}
       >
         <Input
-          placeholder="*Title"
-          allowClear
-          value={editStore.name}
-          onChange={onChange}
+          type="name"
+          placeholder="item Name"
           name="name"
+          value={name}
+          onChange={onChange}
+          required
         />
         <br />
         <br />
-
         <Input
-          placeholder="*Title"
-          allowClear
-          value={editStore.email}
+          type="price"
+          placeholder="price "
+          name="price"
+          value={price}
           onChange={onChange}
-          name="email"
+          required
+        />
+        <br />
+        <br />
+        <Input
+          type="stock"
+          placeholder="stock"
+          name="stock"
+          value={stock}
+          onChange={onChange}
+          required
         />
         <br />
         <br />
         <input type="file" name="imageFile" onChange={uploadFileHandler} />
       </Modal>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-        {stores.map((store) => (
-          <Col key={store.id} className="gutter-row" span={8}>
+        {items.map((item) => (
+          <Col key={item.id} className="gutter-row" span={8}>
             <div style={{ padding: "8px 0" }}>
               <Card
+                key={item.id}
                 hoverable
-                style={{ width: 200, cursor: "default" }}
+                style={{ width: 200 }}
                 cover={
                   <img
-                    onClick={() => {
-                      history.push(`/store/${store.id}`);
-                    }}
                     style={{
                       width: "200px",
                       height: "200px",
                       objectFit: "contain",
-                      cursor: "pointer",
                     }}
                     alt="example"
-                    src={store.logo}
+                    src={"/" + item.image}
                   />
                 }
                 actions={[
                   <EditOutlined
-                    style={{ zIndex: "100" }}
                     key="edit"
                     onClick={() => {
-                      editHandler(store);
+                      editHandler(item);
                     }}
                   />,
                   <DeleteFilled
-                    style={{ zIndex: "100" }}
                     key="delete"
                     onClick={() => {
-                      dispatch(deleteStore(store.id));
+                      dispatch(deleteItem(item.id));
                     }}
                   />,
                 ]}
               >
-                <p>{store.name}</p>
-                <p>{store.email}</p>
+                <p>Name: {item.name}</p>
+                <p>Price: {item.price}</p>
+                <p>inStock: {item.stock}</p>
               </Card>
             </div>
           </Col>
@@ -160,4 +185,4 @@ const StoreList = () => {
   );
 };
 
-export default StoreList;
+export default ItemList;
