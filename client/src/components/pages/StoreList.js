@@ -38,7 +38,6 @@ const StoreList = ({ stores }) => {
   };
   const handleOk = () => {
     setIsModalVisible(false);
-    console.log(editStore);
     dispatch(
       updateStore(editStore.id, editStore.name, editStore.email, editStore.logo)
     );
@@ -77,7 +76,6 @@ const StoreList = ({ stores }) => {
       setEditStore({ ...editStore, logo: data });
       setUploading(false);
     } catch (err) {
-      console.log(err.response.data);
       setUploading(false);
     }
   };

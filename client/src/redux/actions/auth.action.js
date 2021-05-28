@@ -67,7 +67,6 @@ export const login =
         type: LOGIN_SUCCESS,
         payload: data,
       });
-      console.log(data);
     } catch (err) {
       const errors = err.response.data.errors;
       if (errors) {

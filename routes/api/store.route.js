@@ -78,7 +78,6 @@ router.put(
 );
 
 router.post("/upload", auth, upload.single("imageFile"), (req, res, next) => {
-  console.log(req.file);
   return res.send(req.file.path);
 });
 

@@ -49,7 +49,6 @@ export const categoryReducer = (state = initialState, action) => {
         categories: action.payload.result,
       };
     case GET_CATEGORY_SUCCESS:
-      console.log(action.payload);
       return {
         loading: false,
         categories: [],
@@ -70,7 +69,6 @@ export const categoryReducer = (state = initialState, action) => {
         categories: [...state.categories, action.payload.Category],
       };
     case UPDATE_CATEGORY_SUCCESS:
-      console.log("heloooooooooo::::::::::", action.payload);
       return {
         ...state,
         loading: false,

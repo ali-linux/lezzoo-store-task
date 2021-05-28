@@ -35,7 +35,6 @@ export const getStores = () => async (dispatch) => {
       type: GET_ALL_STORE_SUCCESS,
       payload: data,
     });
-    console.log(data);
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -151,7 +150,6 @@ export const updateStore = (id, name, email, logo) => async (dispatch) => {
     });
     dispatch(setAlert(data.msg, "success"));
   } catch (err) {
-    console.log(err.response.data);
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach((err) => {
@@ -184,7 +182,6 @@ export const getStoreDetail = (id) => async (dispatch) => {
       payload: data,
     });
   } catch (err) {
-    console.log(err.response.data);
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach((err) => {

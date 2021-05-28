@@ -49,14 +49,12 @@ export const storeReducer = (state = initialState, action) => {
         stores: action.payload.result,
       };
     case ADD_STORE_SUCCESS:
-      console.log("payload", action.payload.store);
       return {
         ...state,
         loading: false,
         stores: [...state.stores, action.payload.store],
       };
     case DELETE_STORE_SUCCESS:
-      console.log("payload:", action.payload);
       return {
         ...state,
         loading: false,

@@ -67,7 +67,6 @@ export const itemReducer = (state = initialState, action) => {
         items: [...state.items, action.payload.item],
       };
     case UPDATE_ITEM_SUCCESS:
-      console.log("heloooooooooo::::::::::", action.payload);
       return {
         ...state,
         loading: false,

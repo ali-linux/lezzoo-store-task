@@ -72,7 +72,6 @@ const getCategories = async (req, res) => {
       msg: "success",
     });
   } catch (err) {
-    console.log(store_id);
     res.send(err.message);
   }
 };

@@ -4,7 +4,6 @@ const loginValidator = [
   check("email", "please include a valid email").isEmail().normalizeEmail(),
   check("password", "PASSWORD IS REQUIRED").exists(),
   (req, res, next) => {
-    console.log("handling validation inside login");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });

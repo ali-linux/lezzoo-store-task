@@ -7,8 +7,6 @@ const addStore = async (req, res, next) => {
     if (logo === null) {
       logo = "client/src/images/default.jpg";
       console.log("image not found");
-    } else {
-      console.log(logo);
     }
     const result = await db("store").insert({
       name,

@@ -65,7 +65,6 @@ const CategoryDetailPage = ({ match }) => {
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    console.log(file);
     formData.append("imageFile", file);
 
     setUploading(true);
@@ -83,7 +82,6 @@ const CategoryDetailPage = ({ match }) => {
       setItemImage(data);
       setUploading(false);
     } catch (err) {
-      console.log(err.response.data);
       setUploading(false);
     }
   };
