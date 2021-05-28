@@ -2,7 +2,14 @@ const db = require("../config/db");
 
 const addStore = async (req, res, next) => {
   try {
-    const { name, email, logo } = req.body;
+    const { name, email } = req.body;
+    let logo = req.body.logo;
+    if (logo === null) {
+      logo = "client/src/images/default.jpg";
+      console.log("image not found");
+    } else {
+      console.log(logo);
+    }
     const result = await db("store").insert({
       name,
       email: email.toLowerCase(),
