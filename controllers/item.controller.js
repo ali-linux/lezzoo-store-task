@@ -9,7 +9,12 @@ const addItem = async (req, res, next) => {
     const price = parseInt(req.body.price);
     const stock = parseInt(req.body.stock);
     let image = req.body.image;
-    if (typeof req.file !== "undefined") image = req.file.path;
+    if (image === null) {
+      image = "client/src/images/default.jpg";
+      console.log("image not found");
+    } else {
+      console.log(image);
+    }
     const result = await db("item").insert({
       name,
       image,
