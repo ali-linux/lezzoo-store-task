@@ -8,6 +8,34 @@ const authRoute = require("./routes/api/auth.route");
 const storeRoute = require("./routes/api/store.route");
 const categoryRoute = require("./routes/api/category.route");
 const itemRoute = require("./routes/api/item.route");
+const multer = require("multer");
+const auth = require("./middlewares/auth.middleware");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "client/src/images/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter: fileFilter,
+});
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -49,18 +77,20 @@ app.use(
 
 app.use(express.json({ extended: false, limit: "40kb" }));
 
+//for static files
+app.use(express.static("./"));
 //ROUTES
+
 app.use("/api/auth", authRoute);
 app.use("/api/store", storeRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/item", itemRoute);
 
-app.all("*", (req, res, next) => {
-  return res.status(404).json({
-    msg: "404 api endpoint not found",
-  });
-});
-
+// app.all("*", (req, res, next) => {
+//   return res.status(404).json({
+//     msg: "404 api endpoint not found",
+//   });
+// });
 app.listen(port, () => {
   console.log("Express server listening to port ", `http://localhost:${port}`);
 });

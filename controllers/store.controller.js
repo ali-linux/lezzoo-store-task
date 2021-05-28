@@ -2,9 +2,7 @@ const db = require("../config/db");
 
 const addStore = async (req, res, next) => {
   try {
-    const { name, email } = req.body;
-    let logo = req.body.logo;
-    if (typeof req.file !== "undefined") logo = req.file.path;
+    const { name, email, logo } = req.body;
     const result = await db("store").insert({
       name,
       email: email.toLowerCase(),
