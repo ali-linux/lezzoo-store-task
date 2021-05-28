@@ -3,7 +3,7 @@ exports.up = function (knex) {
     table.increments("id").primary();
     table.string("name", 255);
     table.string("email", 255);
-    table.string("logo", 255);
+    table.string("logo", 255).defaultTo("client/src/images/default.jpg");
     table.timestamps(true, true);
   });
 };

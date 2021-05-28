@@ -11,9 +11,8 @@ import { setAlert } from "../../redux/actions/alert.action";
 import Alert from "../layout/Alert";
 import "./homePage.css";
 
-const CategoryList = ({ store_id }) => {
+const CategoryList = ({ store_id, categories }) => {
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.categoryReducer);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editCategory, setEditCategory] = useState({
     name: "",

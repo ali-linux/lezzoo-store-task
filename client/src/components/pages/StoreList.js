@@ -9,10 +9,10 @@ import "./homePage.css";
 import axios from "axios";
 import { deleteStore, updateStore } from "../../redux/actions/store.action";
 
-const StoreList = () => {
+const StoreList = ({ stores }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { stores, loading } = useSelector((state) => state.storeReducer);
+  // const { stores, loading } = useSelector((state) => state.storeReducer);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editStore, setEditStore] = useState({
     id: "",
@@ -112,7 +112,7 @@ const StoreList = () => {
       </Modal>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         {stores.map((store) => (
-          <Col key={store.id} className="gutter-row" span={8}>
+          <Col key={store.id} className="gutter-row" span={6}>
             <div style={{ padding: "8px 0" }}>
               <Card
                 hoverable
@@ -149,7 +149,7 @@ const StoreList = () => {
                   />,
                 ]}
               >
-                <p>{store.name}</p>
+                <p>Store Name: {store.name}</p>
                 <p>{store.email}</p>
               </Card>
             </div>
