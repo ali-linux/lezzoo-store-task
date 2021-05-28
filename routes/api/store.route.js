@@ -7,7 +7,7 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "client/assets/images/stores/");
+    cb(null, "client/src/images/");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -39,7 +39,6 @@ const upload = multer({
 router.post(
   "/add",
   auth,
-  upload.single("imageFile"),
   storeValidator.addStoreValidator,
   storeController.addStore
 );
@@ -77,5 +76,10 @@ router.put(
   storeValidator.addStoreValidator,
   storeController.updateStore
 );
+
+router.post("/upload", auth, upload.single("imageFile"), (req, res, next) => {
+  console.log(req.file);
+  return res.send(req.file.path);
+});
 
 module.exports = router;
