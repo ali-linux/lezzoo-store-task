@@ -11,11 +11,11 @@ import { getStores, addStore } from "../../redux/actions/store.action";
 import Pagination from "../layout/Pagination";
 
 const HomePage = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.loginReducer);
   const { stores, loading } = useSelector((state) => state.storeReducer);
 
+  const history = useHistory();
+  const { isAuthenticated } = useSelector((state) => state.loginReducer);
   if (!isAuthenticated) history.push("/login");
 
   useEffect(() => {
@@ -72,7 +72,6 @@ const HomePage = () => {
       setLogo(data);
       setUploading(false);
     } catch (err) {
-      console.log(err.response.data);
       setUploading(false);
     }
   };

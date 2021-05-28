@@ -38,7 +38,6 @@ export const getItems = (store_id, category_id) => async (dispatch) => {
       type: GET_ITEMS_SUCCESS,
       payload: data,
     });
-    console.log(data);
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -164,7 +163,6 @@ export const updateItem =
       });
       dispatch(setAlert(data.msg, "success"));
     } catch (err) {
-      console.log(err.response.data);
       const errors = err.response.data.errors;
       if (errors) {
         errors.forEach((err) => {

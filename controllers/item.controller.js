@@ -3,7 +3,6 @@ const db = require("../config/db");
 const addItem = async (req, res, next) => {
   const store_id = parseInt(req.params.store_id);
   const category_id = parseInt(req.params.category_id);
-  console.log(req.file);
   try {
     const name = req.body.name;
     const price = parseInt(req.body.price);
@@ -11,9 +10,6 @@ const addItem = async (req, res, next) => {
     let image = req.body.image;
     if (image === null) {
       image = "client/src/images/default.jpg";
-      console.log("image not found");
-    } else {
-      console.log(image);
     }
     const result = await db("item").insert({
       name,
@@ -80,7 +76,6 @@ const getItems = async (req, res) => {
       msg: "success",
     });
   } catch (err) {
-    console.log(store_id);
     res.send(err.message);
   }
 };

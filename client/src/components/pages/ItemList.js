@@ -55,7 +55,6 @@ const ItemList = ({ items, store_id, category_id }) => {
   };
   const handleOk = () => {
     setIsModalVisible(false);
-    console.log(editItem);
     dispatch(
       updateItem(editItem.id, name, image, price, stock, store_id, category_id)
     );
@@ -95,7 +94,6 @@ const ItemList = ({ items, store_id, category_id }) => {
       setEditItem({ ...editItem, image: data });
       setUploading(false);
     } catch (err) {
-      console.log(err.response.data);
       setUploading(false);
     }
   };

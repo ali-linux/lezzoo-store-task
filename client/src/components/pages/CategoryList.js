@@ -33,7 +33,6 @@ const CategoryList = ({ store_id, categories }) => {
   };
   const handleOk = () => {
     setIsModalVisible(false);
-    console.log(editCategory);
     dispatch(updateCategory(editCategory.id, editCategory.name, store_id));
   };
 

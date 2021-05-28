@@ -12,10 +12,15 @@ import CategoryList from "./CategoryList";
 import { setAlert } from "../../redux/actions/alert.action";
 import Alert from "../layout/Alert";
 import Pagination from "../layout/Pagination";
+import { useHistory } from "react-router-dom";
 
 const StoreDetailPage = ({ match }) => {
   const dispatch = useDispatch();
+
   const { store } = useSelector((state) => state.storeReducer);
+  const history = useHistory();
+  const { isAuthenticated } = useSelector((state) => state.loginReducer);
+  if (!isAuthenticated) history.push("/login");
   const { categories } = useSelector((state) => state.categoryReducer);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [category, setCategory] = useState({

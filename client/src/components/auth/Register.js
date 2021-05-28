@@ -27,7 +27,6 @@ const Register = () => {
     e.preventDefault();
     if (password !== password2) {
       dispatch(setAlert("Passwords do not match", "danger"));
-      console.log("passwords do not match");
     } else {
       const result = await dispatch(register({ name, email, password }));
       if (result) history.push("/login");
