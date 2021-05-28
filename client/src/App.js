@@ -27,7 +27,7 @@ const App = () => {
             <Route exact path="/store/:id" component={StoreDetailPage} />
             <Route
               exact
-              path="/store/:id/category/:category_id"
+              path="/store/:id/category/:category_id/"
               component={CategoryDetailPage}
             />
           </div>

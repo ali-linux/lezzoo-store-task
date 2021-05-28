@@ -38,7 +38,7 @@ const deleteStore = async (req, res) => {
 };
 const getStores = async (req, res) => {
   try {
-    const result = await db.from("store").select("*");
+    const result = await db.from("store").select("*").orderBy("id", "desc");
     res.json({
       result,
       msg: "success",
