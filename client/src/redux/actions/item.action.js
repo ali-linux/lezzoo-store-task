@@ -178,37 +178,3 @@ export const updateItem =
       });
     }
   };
-
-export const getItemDetail = (id) => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_ITEM_REQUEST,
-    });
-    const token = JSON.parse(localStorage.getItem("clientInfo")).token;
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": token,
-      },
-    };
-    const { data } = await axios.get(`/api/ITEM/${id}`, config);
-    dispatch({
-      type: GET_ITEM_SUCCESS,
-      payload: data,
-    });
-    console.log(data);
-  } catch (err) {
-    console.log(err.response.data);
-    const errors = err.response.data.errors;
-    if (errors) {
-      errors.forEach((err) => {
-        dispatch(setAlert(err.msg, "danger"));
-      });
-    } else {
-      dispatch(setAlert(err.response.data.msg, "danger"));
-    }
-    dispatch({
-      type: GET_ITEM_FAIL,
-    });
-  }
-};

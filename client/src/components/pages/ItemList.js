@@ -9,10 +9,10 @@ import "./homePage.css";
 import axios from "axios";
 import { deleteItem, updateItem } from "../../redux/actions/item.action";
 
-const ItemList = ({ store_id, category_id }) => {
+const ItemList = ({ items, store_id, category_id }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { items } = useSelector((state) => state.itemReducer);
+  // const { items } = useSelector((state) => state.itemReducer);
   // const { stores } = useSelector((state) => state.itemReducer);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editItem, setEditItem] = useState({
@@ -141,7 +141,7 @@ const ItemList = ({ store_id, category_id }) => {
       </Modal>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         {items.map((item) => (
-          <Col key={item.id} className="gutter-row" span={8}>
+          <Col key={item.id} className="gutter-row" span={6}>
             <div style={{ padding: "8px 0" }}>
               <Card
                 key={item.id}

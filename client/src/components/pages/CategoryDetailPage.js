@@ -10,7 +10,7 @@ import ItemList from "./ItemList";
 import { getItems, addItem } from "../../redux/actions/item.action";
 import { getCategory } from "../../redux/actions/category.action";
 import { getStoreDetail } from "../../redux/actions/store.action";
-
+import Pagination from "../layout/Pagination";
 const CategoryDetailPage = ({ match }) => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -87,6 +87,15 @@ const CategoryDetailPage = ({ match }) => {
       setUploading(false);
     }
   };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
+  // Get current posts
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container">
@@ -94,10 +103,9 @@ const CategoryDetailPage = ({ match }) => {
         <img
           src={"/" + store.logo}
           style={{ width: "40px", height: "40px", objectFit: "contain" }}
-        />{" "}
-        store name: {store.name}
+        />
+        store name: {store.name} -- category : {category.name}
       </h1>
-      <h1>category : {category.name}</h1>
       <Modal
         title="add item"
         visible={isModalVisible}
@@ -152,7 +160,19 @@ const CategoryDetailPage = ({ match }) => {
       ) : (
         <Fragment>
           <Divider orientation="left">Items</Divider>
-          <ItemList store_id={store_id} category_id={category_id} />
+          <ItemList
+            items={currentItems}
+            store_id={store_id}
+            category_id={category_id}
+          />
+          <div className="pagi" style={{ padding: "10px 0" }}>
+            <Pagination
+              postsPerPage={itemsPerPage}
+              totalPosts={items.length}
+              paginate={paginate}
+              category_id={category_id}
+            />
+          </div>
         </Fragment>
       )}
     </div>

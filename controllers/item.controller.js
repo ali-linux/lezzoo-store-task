@@ -61,10 +61,14 @@ const getItems = async (req, res) => {
   const store_id = parseInt(req.params.store_id);
   const category_id = parseInt(req.params.category_id);
   try {
-    const result = await db.select("*").from("Item").where({
-      category_id,
-      store_id,
-    });
+    const result = await db
+      .select("*")
+      .from("Item")
+      .where({
+        category_id,
+        store_id,
+      })
+      .orderBy("id", "desc");
 
     res.json({
       result,

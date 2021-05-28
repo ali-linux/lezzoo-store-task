@@ -65,10 +65,8 @@ const getCategories = async (req, res) => {
           this.on("category.id", "=", "store_category.category_id");
           this.andOn("store_category.store_id", "=", store_id);
         });
-      });
-    // const result = knex("category")
-    //   .join("store", "category.id", "=", "contacts.user_id")
-    //   .select("category.id", "contacts.phone");
+      })
+      .orderBy("name", "asc");
     res.json({
       result,
       msg: "success",
