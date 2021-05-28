@@ -21,7 +21,7 @@ const addItem = async (req, res, next) => {
     const Item_id = result[0];
     res.json({
       msg: "successfully added",
-      Item: {
+      item: {
         id: Item_id,
         name,
         image,
