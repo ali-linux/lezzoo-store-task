@@ -1,7 +1,7 @@
 {
   "name": "lezzoo-store-task",
   "version": "1.0.0",
-  "description": " ",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server"
